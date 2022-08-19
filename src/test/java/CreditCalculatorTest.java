@@ -19,7 +19,7 @@ public class CreditCalculatorTest {
         creditCalculator = new CreditCalculator();
     }
 
-    public void getLoanInformation(int loanAmount, double interestRate, int duration) {
+    public void getLoanInformation(double loanAmount, double interestRate, int duration) {
         File csvFile = new File("src/test/java/testResources/present.csv");
         try {
             CSVReader csvReader = new CSVReader(new FileReader(csvFile));
