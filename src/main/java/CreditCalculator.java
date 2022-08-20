@@ -34,23 +34,26 @@ public class CreditCalculator {
             return;
         }
 
-
         double monthlyPayment = loanAmount * Double.parseDouble(new DecimalFormat("#.######").format(
                 (monthlyInterestAmount *
                         (Math.pow(1 + monthlyInterestAmount, duration))) /
                         (Math.pow(1 + monthlyInterestAmount, duration) - 1)).replaceAll(",", "."));
 
-        saveTheResultToAFile(monthlyPayment, loanAmount, monthlyInterestAmount, interestRate, monthCount++);
-
+        double principalDebt = balanceOwed * monthlyInterestAmount;
 
         balanceOwed = loanAmount - monthlyPayment;
+
+        saveTheResultToAFile(monthlyPayment, principalDebt,balanceOwed, monthCount++);
+
 
         getLoanInformation();
 
     }
 
 
-    public void saveTheResultToAFile(double monthlyPayment, double loanAmount, double monthlyInterestAmount, double interestRate, int monthCount) {
+    public void saveTheResultToAFile(double monthlyPayment, double principalDebt, double balanceOwed, int monthCount) {
+        //общая сумма кредита,ежемесячный платеж, ежемесячные проценты, ,кол-во месяцеоы
+
         File resultFile = new File("result.csv");
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(resultFile))) {
@@ -58,11 +61,11 @@ public class CreditCalculator {
                 writer.writeNext(new String[]{"№ платежа", "Дата платежа", " Сумма платежа", " Основной долг", " Начисленные проценты", " Остаток задолженности"});
             }
             writer.writeNext(new String[]{
-                    String.valueOf(monthCount),
-                    Month.of(monthCount).name(),
-                    String.valueOf(monthlyInterestAmount),
-                    String.valueOf(loanAmount),
-                    String.valueOf(monthlyInterestAmount),
+                    String.valueOf(monthCount),//n
+                    Month.of(monthCount).name(),//date
+                    String.valueOf(monthlyPayment),
+                    String.valueOf(monthlyPayment - principalDebt),//основной долг
+                    String.valueOf(principalDebt),//начисленные проценты
                     String.valueOf(balanceOwed)});
 
         } catch (IOException e) {
