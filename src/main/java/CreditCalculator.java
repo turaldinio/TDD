@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.Month;
+import java.util.GregorianCalendar;
 
 public class CreditCalculator {
     private final int numberOfMonthsInAYear = 12;
@@ -14,6 +15,8 @@ public class CreditCalculator {
     private int duration;
     private double monthlyInterestAmount;
     private DecimalFormat decimalFormat;
+    private GregorianCalendar calendar;
+    private double balanceOwed;
 
     public CreditCalculator(double loanAmount, double interestRate, int duration) {
         this.loanAmount = loanAmount;
@@ -21,6 +24,8 @@ public class CreditCalculator {
         this.duration = duration;
         decimalFormat = new DecimalFormat("#.####");
         monthlyInterestAmount = Double.parseDouble(decimalFormat.format((interestRate / numberOfMonthsInAYear) / 100).replaceAll(",", "."));
+        calendar = new GregorianCalendar();
+        balanceOwed = loanAmount;
     }
 
 
@@ -35,26 +40,30 @@ public class CreditCalculator {
                         (Math.pow(1 + monthlyInterestAmount, duration))) /
                         (Math.pow(1 + monthlyInterestAmount, duration) - 1)).replaceAll(",", "."));
 
-        saveTheResultToAFile(loanAmount, monthlyInterestAmount, interestRate, monthCount++);
+        saveTheResultToAFile(monthlyPayment, loanAmount, monthlyInterestAmount, interestRate, monthCount++);
 
-        loanAmount = loanAmount - monthlyPayment;
+
+        balanceOwed = loanAmount - monthlyPayment;
 
         getLoanInformation();
 
     }
 
 
-    public void saveTheResultToAFile(double loanAmount, double monthlyInterestAmount, double interestRate, int monthCount) {
+    public void saveTheResultToAFile(double monthlyPayment, double loanAmount, double monthlyInterestAmount, double interestRate, int monthCount) {
         File resultFile = new File("result.csv");
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(resultFile))) {
             if (resultFile.length() == 0) {
                 writer.writeNext(new String[]{"№ платежа", "Дата платежа", " Сумма платежа", " Основной долг", " Начисленные проценты", " Остаток задолженности"});
             }
-            writer.writeNext(new String[]{String.valueOf(monthlyInterestAmount),
+            writer.writeNext(new String[]{
+                    String.valueOf(monthCount),
                     Month.of(monthCount).name(),
-                    String.valueOf(interestRate),
-                    String.valueOf(loanAmount)});
+                    String.valueOf(monthlyInterestAmount),
+                    String.valueOf(loanAmount),
+                    String.valueOf(monthlyInterestAmount),
+                    String.valueOf(balanceOwed)});
 
         } catch (IOException e) {
             e.printStackTrace();
