@@ -8,4 +8,6 @@ public interface CreateAndSaveAPaymentSchedule {
 
     void saveTheResultToAFile(List<String[]> list, String filePath);
 
+    void out(List<String[]> list);
+
 }

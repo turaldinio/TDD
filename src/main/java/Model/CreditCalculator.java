@@ -9,10 +9,13 @@ public abstract class CreditCalculator implements RoundingFractionalPart {
     private final double monthlyPayment;
     private List<String[]> result;
     private GregorianCalendar calendar;
+    private int duration;
 
     public CreditCalculator(double loanAmount, double interestRate, int duration) {
 
         int numberOfMonthsInAYear = 12;
+        this.duration = duration;
+
         monthlyInterestAmount = (interestRate / numberOfMonthsInAYear) / 100;
         balanceOwed = Double.parseDouble(changingTheFractionalPart(2).format(loanAmount));
 
@@ -72,5 +75,30 @@ public abstract class CreditCalculator implements RoundingFractionalPart {
 
 
         return getLoanInformation();
+    }
+
+    public int getPaymentNumber() {
+        return paymentNumber;
+    }
+
+    public double getMonthlyInterestAmount() {
+        return monthlyInterestAmount;
+    }
+
+    public double getBalanceOwed() {
+        return balanceOwed;
+    }
+
+    public double getMonthlyPayment() {
+        return monthlyPayment;
+    }
+
+
+    public GregorianCalendar getCalendar() {
+        return calendar;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

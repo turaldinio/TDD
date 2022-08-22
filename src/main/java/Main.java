@@ -8,6 +8,6 @@ public class Main {
 
         TurboBankController controller = new TurboBankController(turboBank, new TurboBankView());
 
-controller.out(controller.getLoanInformation());
+        controller.out(controller.getLoanInformation());
     }
 }

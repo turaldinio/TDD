@@ -1,15 +1,15 @@
 package Controller;
 
 import Model.CreditCalculator;
-import View.TurboBankView;
+import View.CreateAndSaveAPaymentSchedule;
 
 import java.util.List;
 
 public class TurboBankController {
     private CreditCalculator creditCalculator;
-    private TurboBankView paymentScheduler;
+    private CreateAndSaveAPaymentSchedule paymentScheduler;
 
-    public TurboBankController(CreditCalculator creditCalculator, TurboBankView paymentScheduler) {
+    public TurboBankController(CreditCalculator creditCalculator, CreateAndSaveAPaymentSchedule paymentScheduler) {
         this.creditCalculator = creditCalculator;
         this.paymentScheduler = paymentScheduler;
     }
@@ -24,6 +24,14 @@ public class TurboBankController {
 
     public void out(List<String[]> list) {
         paymentScheduler.out(list);
+    }
+
+    public int getDuration() {
+        return creditCalculator.getDuration();
+    }
+
+    public double getBalanceOwed() {
+        return creditCalculator.getBalanceOwed();
     }
 
 }

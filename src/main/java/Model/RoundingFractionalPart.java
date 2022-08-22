@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 
 public interface RoundingFractionalPart {
     /**
-     *
      * @return returns which rounds the number to the specified number after the decimal point
      */
     default DecimalFormat changingTheFractionalPart(int numberOfDecimalPlaces) {
