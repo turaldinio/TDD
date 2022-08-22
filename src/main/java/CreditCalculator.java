@@ -3,32 +3,22 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.time.Month;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class CreditCalculator {
-    private final int numberOfMonthsInAYear = 12;
     private int monthCount = 1;
-    private double interestRate;
-    private double loanAmount;
-    private int duration;
-    private double monthlyInterestAmount;
-    private GregorianCalendar calendar;
+    private final double monthlyInterestAmount;
+    private final GregorianCalendar calendar;
     private double balanceOwed;
-    private double monthlyPayment;
-    private File paymentSchedule;
+    private final double monthlyPayment;
 
     public CreditCalculator(double loanAmount, double interestRate, int duration) {
-        this.loanAmount = loanAmount;
-        this.interestRate = interestRate;
-        this.duration = duration;
 
-        monthlyInterestAmount = Double.parseDouble(changingTheFractionalPart(4).format((interestRate / numberOfMonthsInAYear) / 100).replaceAll(",", "."));
+        int numberOfMonthsInAYear = 12;
+        monthlyInterestAmount = (interestRate / numberOfMonthsInAYear) / 100;
         calendar = new GregorianCalendar();
         balanceOwed = Double.parseDouble(changingTheFractionalPart(2).format(loanAmount));
 
@@ -40,7 +30,7 @@ public class CreditCalculator {
                                         (Math.pow(1 + monthlyInterestAmount, duration))) /
                                 (Math.pow(1 + monthlyInterestAmount, duration) - 1)).replaceAll(",", "."));
 
-        paymentSchedule = new File("result.csv");
+        File paymentSchedule = new File("result.csv");
         if (paymentSchedule.length() != 0) {
             paymentSchedule.delete();
 
@@ -50,9 +40,6 @@ public class CreditCalculator {
 
 
     public void getLoanInformation() {
-//        if (balanceOwed < monthlyPayment) {
-//            return;
-//        }
 
 
         double accruedInterest = Double.parseDouble(changingTheFractionalPart(2).
